@@ -1,0 +1,188 @@
+[colors]
+;background = ${xrdb:color0:#222}
+background = #F71F1D36
+;dd
+background-alt = #3F3351
+;foreground = ${xrdb:color7:#222}
+foreground = #E9A6A6
+foreground-alt = #3F3351
+primary = #ffb52a
+secondary = #3F3351
+alert = #bd2c40
+
+[bar/mainbar]
+modules-left = i3 autoscroll previous spotify playpause next
+monitor = ${env:MONITOR:}
+modules-right = power memory cpu date i3-windows
+enable-ipc = true
+#width = 99%
+# height = 27
+#offset-x = 0.5%
+;offset-y = 1%
+# radius = 6.0
+# fixed-center = false
+#override-redirect = true
+background = ${colors.background}
+foreground = ${colors.foreground}
+
+line-size = 3
+line-color = #f00
+
+# border-size = 3
+border-color = #1F1D36
+
+padding-left = 0
+# padding-right = 2
+
+module-margin-left = 1
+module-margin-right = 2
+
+font-0 = fixed:pixelsize=10;1
+font-1 = unifont:fontformat=truetype:size=8:antialias=false;0
+font-2 = siji:pixelsize=10;1
+font-3 = symbola
+font-4 = fontawesome-webfont:pixelsize=13
+font-5 = "Wuncon Siji:pixelsize=10;1"
+
+tray-position = right
+tray-padding = 2
+[module/power]
+type = custom/script
+exec = echo "power"
+format-foreground = #b30000
+click-left = "rofi -show p -modi p:~/pacman/rofi-power-menu/rofi-power-menu"
+[module/previous]
+type = custom/script
+interval = 5
+format = "%{T3}<label>"
+format-padding = 5
+; Previous song icon
+exec = echo ""
+; Check if spotify is running before displaying the icon
+exec-if = "pgrep spotify -x"
+format-underline = #1db954
+line-size = 1
+click-left = "dbus-send --print-reply --dest=org.mpris.MediaPlayer2.spotify /org/mpris/MediaPlayer2 org.mpris.MediaPlayer2.Player.Previous"
+
+[module/next]
+type = custom/script
+interval = 5
+format = "%{T3}<label>"
+format-padding = 5
+; Next song icon
+exec = echo ""
+; Check if spotify is running before displaying the icon
+exec-if = "pgrep spotify -x"
+format-underline = #1db954
+line-size = 1
+click-left = "dbus-send --print-reply --dest=org.mpris.MediaPlayer2.spotify /org/mpris/MediaPlayer2 org.mpris.MediaPlayer2.Player.Next"
+
+[module/playpause]
+type = custom/script
+exec = echo ""
+exec-if = "pgrep spotify -x"
+format-underline = #1db954
+line-size = 1
+click-left = "dbus-send --print-reply --dest=org.mpris.MediaPlayer2.spotify /org/mpris/MediaPlayer2 org.mpris.MediaPlayer2.Player.PlayPause"
+
+[module/spotify]
+type = custom/script
+interval = 5
+exec = python3 ~/.config/polybar/scripts/polybar-spotify-controls/scripts/spotify/spotify_status.py
+format-padding = 4
+format-underline = #1db954
+line-size = 1
+; [i3wm only] - Uncomment the below line to focus on Spotify when clicking on the song name (credits to https://github.com/Esya)
+click-left = i3-msg '[class="Spotify"] focus'
+
+[module/i3-windows]
+type = custom/script
+exec = ~/.config/polybar/scripts/polybar-i3-windows/module.py
+tail = true
+[module/browsermediacontrol]  
+type = custom/script  
+exec = ~/.config/polybar/scripts/browsermediacontrols.py
+scroll-up = ~/.config/polybar/scripts/browsermediacontrols.py --volume 1
+scroll-down = ~/.config/polybar/scripts/browsermediacontrols.py --volume -1 
+interval = 0.1
+[module/i3]
+type = internal/i3
+format = <label-state> <label-mode>
+index-sort = true
+wrapping-scroll = false
+border-size = 3
+
+; Only show workspaces on the same output as the bar
+;pin-workspaces = true
+
+label-mode-padding = 2
+label-mode-foreground = #000
+label-mode-background = ${colors.primary}
+
+; focused = Active workspace on focused monitor
+label-focused = %index%
+label-focused-background = ${colors.background-alt}
+label-focused-underline= ${colors.primary}
+label-focused-padding = 2
+
+; unfocused = Inactive workspace on any monitor
+label-unfocused = %index%
+label-unfocused-padding = 2
+
+; visible = Active workspace on unfocused monitor
+label-visible = %index%
+label-visible-background = ${self.label-focused-background}
+label-visible-underline = ${self.label-focused-underline}
+label-visible-padding = ${self.label-focused-padding}
+
+; urgent = Workspace with urgency hint set
+label-urgent = %index%
+label-urgent-background = ${colors.alert}
+label-urgent-padding = 2
+
+; Separator in between workspaces
+; label-separator = |
+[module/autoscroll]
+type = custom/ipc
+hook-0 = echo ⏼
+hook-1 = echo ✓
+click-left = ~/.config/polybar/scripts/autoscroll.sh
+initial = 1
+format-foreground = ${colors.color4}
+
+[module/cpu]
+type = internal/cpu
+interval = 2
+format-prefix = "cpu "
+format-prefix-foreground = ${colors.foreground-alt}
+format-underline = #f90000
+label = %percentage:2%%
+
+[module/memory]
+type = internal/memory
+interval = 2
+format-prefix = "mem "
+format-prefix-foreground = ${colors.foreground-alt}
+format-underline = #4bffdc
+label = %percentage_used%%
+
+[module/date]
+type = custom/script
+exec = ~/.config/polybar/scripts/date.sh
+tail = true
+
+format-prefix-foreground = ${colors.foreground-alt}
+format-underline = #0a6cf5
+[settings]
+screenchange-reload = true
+;compositing-background = xor
+;compositing-background = screen
+;compositing-foreground = source
+;compositing-border = over
+;pseudo-transparency = false
+
+[global/wm]
+margin-top = 3
+margin-bottom = 3
+
+; vim:ft=dosini
