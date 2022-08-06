@@ -110,7 +110,7 @@ bindsym $mod+Shift+r restart
 bindsym $mod+Shift+e exec "i3-nagbar -t warning -m 'You pressed the exit shortcut. Do you really want to exit i3? This will end your X session.' -B 'Yes, exit i3' 'i3-msg exit'"
 
 bindsym $mod+Shift+s exec "spectacle -r"
-bindsym $mod+s exec "csearch"
+bindsym $mod+s exec "rofi -lines 10 -padding 0 -show search -modi search:~/pacman/rofi-web-search/rofi-web-search.py -i -p 'Search:'"
 # resize window (you can also use the mouse for that)
 mode "resize" {
         bindsym Right resize shrink width 10 px or 10 ppt
